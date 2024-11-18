@@ -4,16 +4,19 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import FastAPI
-import uvicorn
 
 from controller.auth_controller import router as auth_router
 from controller.contact_controller import router as contact_router
 from models.dbConfig import db_lifespan
 from dotenv import load_dotenv
+from swagger_config import custom_openapi
 
 load_dotenv()
 
 app = FastAPI(lifespan=db_lifespan)
+
+# Assign the custom OpenAPI schema
+app.openapi = lambda: custom_openapi(app)
 
 port = int(os.environ.get("PORT", 8000))
 

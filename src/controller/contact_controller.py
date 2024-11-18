@@ -1,5 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.encoders import jsonable_encoder
+
 
 from models.contactModel import Contact, ContactCreate, ContactUpdate
 from dependencies import UserInDB, get_current_user
@@ -34,23 +36,33 @@ async def get_all_contacts(user:Annotated[UserInDB, Depends(get_current_user)]):
 
 @router.patch("/update/{contact_id}", response_model=Contact)
 async def update_contact(contact_id:str, contacts:ContactUpdate, user:Annotated[UserInDB, Depends(get_current_user)]):
-    print('Get all contacts')
+
     contact = await Contact.get(contact_id)
     if not contact:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            detail="Contact not found"
         )
     
     update_data = contacts.model_dump(exclude_unset=True)
+
     for key, value in update_data.items():
-        setattr(user, key, value)
+        setattr(contact, key, value)
 
     # Save the updated document
-    await user.save()
-    return user
+    await contact.save()
+    return contact
 
-    return {
-        "message":"Contact Lists",
-        "data":stored_item_model
-        }
+
+
+@router.delete("/delete/{contact_id}")
+async def delete_contact(contact_id:str, user:Annotated[UserInDB, Depends(get_current_user)]):
+    contact = Contact.find(Contact.id == contact_id)
+    if not contact:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Contact not found"
+        )
+    await contact.delete()
+
+    return {f"message: Contact Deleted Successfully"}

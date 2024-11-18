@@ -20,12 +20,12 @@ class ContactCreate(BaseModel):
 
 
 class ContactUpdate(BaseModel):
-    username: Optional[str]
-    email: Optional[str]
-    phone: Optional[str]
-    address: Optional[str] 
-    company:Optional[str]
-    notes:Optional[str]
+    username: Optional[str]=None
+    email: Optional[str]=None
+    phone: Optional[str]=None
+    address: Optional[str]=None 
+    company:Optional[str]=None
+    notes:Optional[str]=None
 
 
 class Contact(Document):
