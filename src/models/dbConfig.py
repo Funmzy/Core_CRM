@@ -8,9 +8,13 @@ from logging import info
 from models.userModel import User 
 from models.contactModel import Contact
 
+from dotenv import load_dotenv
 
-# CONNECTION_STRING = os.environ['MONGODB_URI']
-CONNECTION_STRING = 'mongodb+srv://coreCrm:FfmxUTfVxFP98HQC@cluster0.bqyjg.mongodb.net/coreCrm?retryWrites=true&w=majority&appName=Cluster0'
+load_dotenv()
+
+
+CONNECTION_STRING = os.getenv('MONGODB_URL')
+DB_NAME = os.getenv('DB_NAME')
 
 
 
@@ -19,7 +23,8 @@ async def db_lifespan(app: FastAPI):
     # Startup
     # Create a MongoDB client
     app.mongodb_client = AsyncIOMotorClient(CONNECTION_STRING)
-    app.database = app.mongodb_client.get_default_database()
+    db_name = DB_NAME
+    app.database =  app.mongodb_client[db_name]
     ping_response = await app.database.command("ping")
     if int(ping_response["ok"]) != 1:
         raise Exception("Problem connecting to database cluster.")

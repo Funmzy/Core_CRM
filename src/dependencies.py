@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any
 
@@ -13,10 +14,14 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from models.dbConfig import db_lifespan, get_database
 from models.userModel import User
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
-SECRET_KEY = "620111df9fcf8c25e1958f0235d7f0b73d71e0b727c7c522b9e95b021d2fc47c"
-ALGORITHM = "HS256"
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
