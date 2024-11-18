@@ -46,5 +46,7 @@ async def db_lifespan(app: FastAPI):
 
 async def get_database():
     client = AsyncIOMotorClient(CONNECTION_STRING)
-    db = client.get_default_database()
+    db_name = DB_NAME
+    db =  client[db_name]
+    # db = client.get_default_database()
     return db
