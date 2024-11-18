@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from beanie import Document, Link
 
+from models.contactModel import Contact
 from models.userModel import User
 
 class Priority(str, Enum):
@@ -28,7 +29,16 @@ class Task_Validation(BaseModel):
     due_date: str
     priority: Priority
     task_status: Task_Status
+    contact_id:str
 
+
+class TaskUpdate(BaseModel):
+    title : Optional[str]= None
+    description: Optional[str]= None
+    due_date: Optional[str]= None
+    priority: Optional[Priority]= None
+    task_status: Optional[Task_Status]= None
+    contact_id:Optional[str]= None
 
 
 
@@ -37,8 +47,9 @@ class Task(Document):
     description:str
     due_date:datetime
     priority:Priority
-    status:Task_Status
+    task_status:Task_Status
     user: Link[User]
+    contact_id:Link[Contact]
     created_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = Field(default=True)
 

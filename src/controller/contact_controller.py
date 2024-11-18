@@ -24,7 +24,7 @@ async def create_contact(contact:ContactCreate,user: Annotated[UserInDB, Depends
 
 
 
-@router.get("/get_all")
+@router.get("/")
 async def get_all_contacts(user:Annotated[UserInDB, Depends(get_current_user)]):
     print('Get all contacts')
     contacts= await Contact.find().to_list()
