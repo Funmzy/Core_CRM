@@ -36,7 +36,7 @@ async def get_all_contacts(user:Annotated[UserInDB, Depends(get_current_user)]):
         }
 
 
-@router.patch("/update/{task_id}", response_model=Task)
+@router.patch("/{task_id}", response_model=Task)
 async def update_contact(task_id:str, tasks:TaskUpdate, user:Annotated[UserInDB, Depends(get_current_user)]):
 
     task = await Task.get(task_id)

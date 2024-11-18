@@ -5,19 +5,19 @@ from fastapi.encoders import jsonable_encoder
 
 from models.contactModel import Contact, ContactCreate, ContactUpdate
 from dependencies import UserInDB, get_current_user
+from models.interactionModel import Interaction, InteractionValidation
 
 
 router = APIRouter()
 
 
 @router.post('/')
-async def create_interaction(contact:ContactCreate,user: Annotated[UserInDB, Depends(get_current_user)]):
+async def create_interaction(log:InteractionValidation,user: Annotated[UserInDB, Depends(get_current_user)]):
     
-    new_contact= Contact(
-        username=contact.username, email=contact.email, phone=contact.phone, address=contact.address, company=contact.company,
-        user=user.id, notes=contact.notes)
-    await new_contact.create()
+    new_log= Interaction( note=log.note, date=log.date, log_type=log.log_type, contact=log.contact, user=user.id)
+    
+    await new_log.create()
     return {
-        "message":"Contacted Created Success",
-        "data":new_contact
+        "message":"Logs Created Successfully",
+        "data":new_log
         }

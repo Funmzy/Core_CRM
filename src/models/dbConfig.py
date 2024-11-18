@@ -5,6 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from contextlib import asynccontextmanager
 from logging import info
 
+from models.interactionModel import Interaction
 from models.taskModel import Task
 from models.userModel import User 
 from models.contactModel import Contact
@@ -35,7 +36,7 @@ async def db_lifespan(app: FastAPI):
 
     
     # Initialize Beanie with the database and document models
-    await init_beanie(database=app.database, document_models=[User, Contact, Task])
+    await init_beanie(database=app.database, document_models=[User, Contact, Task, Interaction])
 
     
     yield

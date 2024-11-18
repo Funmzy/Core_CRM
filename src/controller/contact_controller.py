@@ -34,7 +34,7 @@ async def get_all_contacts(user:Annotated[UserInDB, Depends(get_current_user)]):
         }
 
 
-@router.patch("/update/{contact_id}", response_model=Contact)
+@router.patch("/{contact_id}", response_model=Contact)
 async def update_contact(contact_id:str, contacts:ContactUpdate, user:Annotated[UserInDB, Depends(get_current_user)]):
 
     contact = await Contact.get(contact_id)
@@ -55,7 +55,7 @@ async def update_contact(contact_id:str, contacts:ContactUpdate, user:Annotated[
 
 
 
-@router.delete("/delete/{contact_id}")
+@router.delete("/{contact_id}")
 async def delete_contact(contact_id:str, user:Annotated[UserInDB, Depends(get_current_user)]):
     contact = Contact.find(Contact.id == contact_id)
     if not contact:

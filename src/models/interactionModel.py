@@ -2,24 +2,36 @@ from typing import Optional
 from datetime import datetime
 from enum import Enum
 
-from contactModel import Contact
+from models.contactModel import Contact
 
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from beanie import Document, Indexed, Link
 
-class Type(str, Enum):
+from models.userModel import User
+
+class Log_Type(str, Enum):
     call = 'call'
     email = 'email'
     meeting ='meeting'
 
 
+class InteractionValidation(BaseModel):
+    note: str
+    date: str
+    log_type: Log_Type
+    contact:str
+
+
+
+
 class Interaction(Document):
-    Contact:Link[Contact]
     note:str
     date:datetime
-    type:Type
+    log_type:Log_Type
+    contact:Link[Contact]
+    user:Link[User]
     created_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = Field(default=True)
 
